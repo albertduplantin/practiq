@@ -21,8 +21,8 @@ export default function Login() {
         await signInWithEmailAndPassword(auth, email, password);
       }
       router.push("/");
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Une erreur est survenue');
     }
   };
 

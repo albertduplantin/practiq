@@ -24,7 +24,7 @@ export default function Home() {
             <button onClick={logout}>Déconnexion</button>
           </>
         ) : (
-          <Link href="/login">Se connecter / S'inscrire</Link>
+          <Link href="/login">Se connecter / S&apos;inscrire</Link>
         )}
       </main>
       <footer className={styles.footer}>
