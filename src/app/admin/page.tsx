@@ -9,7 +9,7 @@ import { Plus, BookOpen, Users, BarChart3 } from 'lucide-react';
 import Link from 'next/link';
 
 export default function AdminDashboard() {
-  const { user, loading } = useAuth();
+  const { user, userDoc, loading } = useAuth();
   const router = useRouter();
   const [stats] = useState({
     totalTPs: 0,
@@ -19,10 +19,10 @@ export default function AdminDashboard() {
   });
 
   useEffect(() => {
-    if (!loading && (!user || !['admin', 'teacher_pro', 'teacher_free'].includes(user.role || ''))) {
+    if (!loading && (!userDoc || !['admin', 'teacher_pro', 'teacher_free'].includes(userDoc.role))) {
       router.push('/');
     }
-  }, [user, loading, router]);
+  }, [userDoc, loading, router]);
 
   if (loading) {
     return (
@@ -32,7 +32,7 @@ export default function AdminDashboard() {
     );
   }
 
-  if (!user || !['admin', 'teacher_pro', 'teacher_free'].includes(user.role || '')) {
+  if (!userDoc || !['admin', 'teacher_pro', 'teacher_free'].includes(userDoc.role)) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -166,7 +166,7 @@ export default function AdminDashboard() {
                   Voir les utilisateurs
                 </Link>
               </Button>
-              {user.role === 'admin' && (
+              {userDoc.role === 'admin' && (
                 <Button asChild variant="outline" className="w-full">
                   <Link href="/admin/settings">
                     Paramètres
