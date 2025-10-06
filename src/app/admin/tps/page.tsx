@@ -28,9 +28,9 @@ export default function TPsList() {
   const [filteredTPs, setFilteredTPs] = useState<TP[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState<TPFilter>({
-    category: '',
-    difficulty: '',
-    status: ''
+    categorie: '',
+    difficulte: 0,
+    statut: '' as any
   });
   const [loadingTPs, setLoadingTPs] = useState(true);
 
@@ -73,14 +73,14 @@ export default function TPsList() {
     }
 
     // Filtres
-    if (filter.category) {
-      filtered = filtered.filter(tp => tp.category === filter.category);
+    if (filter.categorie) {
+      filtered = filtered.filter(tp => tp.category === filter.categorie);
     }
-    if (filter.difficulty) {
-      filtered = filtered.filter(tp => tp.difficulty === filter.difficulty);
+    if (filter.difficulte) {
+      filtered = filtered.filter(tp => tp.difficulty === filter.difficulte);
     }
-    if (filter.status) {
-      filtered = filtered.filter(tp => tp.status === filter.status);
+    if (filter.statut) {
+      filtered = filtered.filter(tp => tp.status === filter.statut);
     }
 
     setFilteredTPs(filtered);
@@ -190,8 +190,8 @@ export default function TPsList() {
             </div>
             
             <select
-              value={filter.category}
-              onChange={(e) => setFilter({ ...filter, category: e.target.value })}
+              value={filter.categorie}
+              onChange={(e) => setFilter({ ...filter, categorie: e.target.value })}
               className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
             >
               <option value="">Toutes les catégories</option>
@@ -203,8 +203,8 @@ export default function TPsList() {
             </select>
 
             <select
-              value={filter.difficulty}
-              onChange={(e) => setFilter({ ...filter, difficulty: e.target.value })}
+              value={filter.difficulte || ''}
+              onChange={(e) => setFilter({ ...filter, difficulte: Number(e.target.value) || 0 })}
               className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
             >
               <option value="">Tous les niveaux</option>
@@ -214,8 +214,8 @@ export default function TPsList() {
             </select>
 
             <select
-              value={filter.status}
-              onChange={(e) => setFilter({ ...filter, status: e.target.value })}
+              value={filter.statut || ''}
+              onChange={(e) => setFilter({ ...filter, statut: e.target.value as any })}
               className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
             >
               <option value="">Tous les statuts</option>
@@ -237,7 +237,7 @@ export default function TPsList() {
               Aucun TP trouvé
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
-              {searchTerm || filter.category || filter.difficulty || filter.status
+              {searchTerm || filter.categorie || filter.difficulte || filter.statut
                 ? 'Aucun TP ne correspond à vos critères de recherche.'
                 : 'Commencez par créer votre premier TP.'}
             </p>
