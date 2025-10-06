@@ -29,7 +29,7 @@ export default function EditTP({ params }: { params: { id: string } }) {
     difficulte: 'facile',
     youtubeId: '',
     tags: [] as string[],
-    statut: 'brouillon' as const,
+    statut: 'brouillon' as 'brouillon' | 'publié',
     pdfUrl: '',
     pdfFileName: ''
   });
@@ -61,7 +61,7 @@ export default function EditTP({ params }: { params: { id: string } }) {
           difficulte: String(data.difficulte),
           youtubeId: data.youtubeId || '',
           tags: data.tags || [],
-          statut: data.statut,
+          statut: data.statut as 'brouillon' | 'publié',
           pdfUrl: data.pdfUrl || '',
           pdfFileName: data.pdfFileName || ''
         });
@@ -237,7 +237,7 @@ export default function EditTP({ params }: { params: { id: string } }) {
                 <select
                   id="status"
                   value={formData.statut}
-                  onChange={(e) => setFormData(prev => ({ ...prev, statut: e.target.value as 'brouillon' | 'publie' }))}
+                  onChange={(e) => setFormData(prev => ({ ...prev, statut: e.target.value as 'brouillon' | 'publié' }))}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                 >
                   <option value="brouillon">Brouillon</option>
