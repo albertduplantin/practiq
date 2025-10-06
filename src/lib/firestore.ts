@@ -7,7 +7,6 @@ import {
   getDoc, 
   addDoc, 
   updateDoc, 
-  deleteDoc, 
   query, 
   where, 
   orderBy, 
@@ -17,7 +16,7 @@ import {
   DocumentData
 } from 'firebase/firestore';
 import { db } from '@/firebase/config';
-import { TP, UserDoc, Progress, Comment, Course, TPFilter, ProgressStats } from '@/types/firestore';
+import { TP, UserDoc, Progress, Comment, TPFilter, ProgressStats } from '@/types/firestore';
 
 // Collections
 export const COLLECTIONS = {
@@ -127,7 +126,7 @@ export const updateProgress = async (userId: string, tpId: string, progressData:
       ...progressData,
       updatedAt: new Date()
     });
-  } catch (error) {
+  } catch {
     // Si le document n'existe pas, le créer
     await addDoc(getCollection(COLLECTIONS.PROGRESS), {
       id: progressId,

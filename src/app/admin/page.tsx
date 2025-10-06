@@ -11,7 +11,7 @@ import Link from 'next/link';
 export default function AdminDashboard() {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const [stats, setStats] = useState({
+  const [stats] = useState({
     totalTPs: 0,
     publishedTPs: 0,
     totalUsers: 0,
