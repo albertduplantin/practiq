@@ -8,11 +8,12 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Textarea } from '@/components/ui/Textarea';
-import { ArrowLeft, Save, Eye } from 'lucide-react';
+import { ArrowLeft, Save, Eye, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { TP } from '@/types/firestore';
 import { getTP, updateTP } from '@/lib/firestore';
 import TipTapEditor from '@/components/editor/TipTapEditor';
+import FileUpload from '@/components/ui/FileUpload';
 
 export default function EditTP({ params }: { params: { id: string } }) {
   const { userDoc, loading } = useAuth();
@@ -29,7 +30,9 @@ export default function EditTP({ params }: { params: { id: string } }) {
     difficulty: 'facile',
     youtubeId: '',
     tags: [] as string[],
-    status: 'draft' as 'draft' | 'published'
+    status: 'draft' as 'draft' | 'published',
+    pdfUrl: '',
+    pdfFileName: ''
   });
 
   const [tagsInput, setTagsInput] = useState('');
@@ -59,7 +62,9 @@ export default function EditTP({ params }: { params: { id: string } }) {
           difficulty: data.difficulty,
           youtubeId: data.youtubeId || '',
           tags: data.tags || [],
-          status: data.status
+          status: data.status,
+          pdfUrl: data.pdfUrl || '',
+          pdfFileName: data.pdfFileName || ''
         });
         setTagsInput(data.tags?.join(', ') || '');
       }
@@ -101,6 +106,18 @@ export default function EditTP({ params }: { params: { id: string } }) {
 
   const handleDescriptionChange = (content: string) => {
     setFormData(prev => ({ ...prev, description: content }));
+  };
+
+  const handlePdfUpload = (url: string, fileName: string) => {
+    setFormData(prev => ({ 
+      ...prev, 
+      pdfUrl: url, 
+      pdfFileName: fileName 
+    }));
+  };
+
+  const handlePdfError = (error: string) => {
+    alert(error);
   };
 
   if (loading || loadingTP) {
@@ -263,6 +280,31 @@ export default function EditTP({ params }: { params: { id: string } }) {
               onChange={handleDescriptionChange}
               placeholder="Décrivez les objectifs, le matériel nécessaire, les étapes à suivre..."
             />
+          </Card>
+
+          <Card className="p-6">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
+              Fichier PDF (optionnel)
+            </h2>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              Ajoutez un fichier PDF avec les instructions détaillées du TP (max 2MB)
+            </p>
+            <FileUpload
+              onUploadComplete={handlePdfUpload}
+              onUploadError={handlePdfError}
+              accept=".pdf"
+              maxSize={2}
+            />
+            {formData.pdfUrl && (
+              <div className="mt-4 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-md">
+                <div className="flex items-center gap-2">
+                  <FileText className="h-4 w-4 text-green-600" />
+                  <span className="text-sm text-green-800 dark:text-green-200">
+                    Fichier PDF : {formData.pdfFileName}
+                  </span>
+                </div>
+              </div>
+            )}
           </Card>
 
           {error && (

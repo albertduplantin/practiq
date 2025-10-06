@@ -9,6 +9,7 @@ export interface TP {
   difficulte: 1 | 2 | 3 | 4 | 5; // 1 = très facile, 5 = expert
   youtubeId?: string; // ID de la vidéo YouTube
   pdfUrl?: string; // URL du PDF dans Firebase Storage
+  pdfFileName?: string; // Nom du fichier PDF
   imageUrl?: string; // Image de couverture
   auteurId: string; // ID de l'enseignant qui a créé le TP
   auteurNom: string; // Nom affiché de l'auteur

@@ -9,10 +9,11 @@ import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Textarea } from '@/components/ui/Textarea';
 import { TipTapEditor } from '@/components/editor/TipTapEditor';
-import { ArrowLeft, Save, Upload } from 'lucide-react';
+import { ArrowLeft, Save, Upload, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { createTP } from '@/lib/firestore';
 import { TP } from '@/types/firestore';
+import FileUpload from '@/components/ui/FileUpload';
 
 const CATEGORIES = [
   'Fabrication',
@@ -36,8 +37,22 @@ export default function NewTP() {
     difficulte: 1 as const,
     youtubeId: '',
     tags: '',
-    statut: 'brouillon' as const
+    statut: 'brouillon' as const,
+    pdfUrl: '',
+    pdfFileName: ''
   });
+
+  const handlePdfUpload = (url: string, fileName: string) => {
+    setFormData(prev => ({ 
+      ...prev, 
+      pdfUrl: url, 
+      pdfFileName: fileName 
+    }));
+  };
+
+  const handlePdfError = (error: string) => {
+    alert(error);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -188,6 +203,29 @@ export default function NewTP() {
                     placeholder="Décrivez le TP en détail, les objectifs, le matériel nécessaire, les étapes..."
                   />
                 </div>
+              </Card>
+
+              <Card className="p-6">
+                <h2 className="text-xl font-semibold mb-4">Fichier PDF (optionnel)</h2>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                  Ajoutez un fichier PDF avec les instructions détaillées du TP (max 2MB)
+                </p>
+                <FileUpload
+                  onUploadComplete={handlePdfUpload}
+                  onUploadError={handlePdfError}
+                  accept=".pdf"
+                  maxSize={2}
+                />
+                {formData.pdfUrl && (
+                  <div className="mt-4 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-md">
+                    <div className="flex items-center gap-2">
+                      <FileText className="h-4 w-4 text-green-600" />
+                      <span className="text-sm text-green-800 dark:text-green-200">
+                        Fichier PDF : {formData.pdfFileName}
+                      </span>
+                    </div>
+                  </div>
+                )}
               </Card>
             </div>
 
