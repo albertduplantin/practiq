@@ -12,7 +12,7 @@ import { ArrowLeft, Save, Eye, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { TP } from '@/types/firestore';
 import { getTP, updateTP } from '@/lib/firestore';
-import TipTapEditor from '@/components/editor/TipTapEditor';
+import { TipTapEditor } from '@/components/editor/TipTapEditor';
 import FileUpload from '@/components/ui/FileUpload';
 
 export default function EditTP({ params }: { params: { id: string } }) {
