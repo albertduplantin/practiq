@@ -58,7 +58,7 @@ export default function EditTP({ params }: { params: { id: string } }) {
           titre: data.titre,
           description: data.description,
           categorie: data.categorie,
-          difficulte: data.difficulte,
+          difficulte: String(data.difficulte),
           youtubeId: data.youtubeId || '',
           tags: data.tags || [],
           statut: data.statut,
