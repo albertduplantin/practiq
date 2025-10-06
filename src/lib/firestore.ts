@@ -66,6 +66,11 @@ export const getTP = async (tpId: string): Promise<TP | null> => {
   return docSnap.exists() ? { id: docSnap.id, ...docSnap.data() } as TP : null;
 };
 
+export const deleteTP = async (tpId: string): Promise<void> => {
+  const docRef = getDocument(COLLECTIONS.TPS, tpId);
+  await deleteDoc(docRef);
+};
+
 export const createTP = async (tpData: Omit<TP, 'id' | 'createdAt' | 'updatedAt'>) => {
   const docRef = await addDoc(getCollection(COLLECTIONS.TPS), {
     ...tpData,
