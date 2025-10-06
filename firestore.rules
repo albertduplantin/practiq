@@ -1,0 +1,78 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Règles pour les TP
+    match /tps/{tpId} {
+      // Lecture publique pour tous les TP publiés
+      allow read: if resource.data.statut == 'publié';
+      
+      // Lecture/écriture pour les auteurs et admins
+      allow read, write: if request.auth != null && 
+        (resource.data.auteurId == request.auth.uid || 
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'teacher_pro', 'teacher_free']);
+      
+      // Création pour les enseignants et admins
+      allow create: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'teacher_pro', 'teacher_free'];
+    }
+    
+    // Règles pour les utilisateurs
+    match /users/{userId} {
+      // Lecture de son propre profil
+      allow read: if request.auth != null && request.auth.uid == userId;
+      
+      // Écriture de son propre profil (sauf role et premium)
+      allow update: if request.auth != null && request.auth.uid == userId &&
+        !('role' in request.resource.data) && !('premium' in request.resource.data);
+      
+      // Lecture/écriture complète pour les admins
+      allow read, write: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+      
+      // Création lors de l'inscription
+      allow create: if request.auth != null && request.auth.uid == userId &&
+        request.resource.data.role == 'student';
+    }
+    
+    // Règles pour la progression
+    match /progress/{progressId} {
+      // Lecture/écriture de sa propre progression
+      allow read, write: if request.auth != null && 
+        resource.data.userId == request.auth.uid;
+      
+      // Lecture pour les enseignants (pour voir les stats de leurs TP)
+      allow read: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'teacher_pro', 'teacher_free'];
+    }
+    
+    // Règles pour les commentaires
+    match /comments/{commentId} {
+      // Lecture publique des commentaires modérés
+      allow read: if resource.data.isModerated == true && resource.data.isDeleted == false;
+      
+      // Écriture pour les utilisateurs connectés
+      allow create: if request.auth != null && 
+        request.resource.data.userId == request.auth.uid;
+      
+      // Modification de ses propres commentaires
+      allow update: if request.auth != null && 
+        resource.data.userId == request.auth.uid;
+      
+      // Suppression/modération pour les admins
+      allow update, delete: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Règles pour les cours
+    match /courses/{courseId} {
+      // Lecture publique des cours publiés
+      allow read: if resource.data.statut == 'publié';
+      
+      // Lecture/écriture pour les auteurs et admins
+      allow read, write: if request.auth != null && 
+        (resource.data.auteurId == request.auth.uid || 
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'teacher_pro', 'teacher_free']);
+    }
+  }
+}
