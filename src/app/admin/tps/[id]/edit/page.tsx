@@ -7,8 +7,7 @@ import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
-import { Textarea } from '@/components/ui/Textarea';
-import { ArrowLeft, Save, Eye, FileText } from 'lucide-react';
+import { ArrowLeft, Save, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { TP } from '@/types/firestore';
 import { getTP, updateTP } from '@/lib/firestore';
@@ -24,13 +23,13 @@ export default function EditTP({ params }: { params: { id: string } }) {
   const [error, setError] = useState('');
 
   const [formData, setFormData] = useState({
-    title: '',
+    titre: '',
     description: '',
-    category: 'Fabrication',
-    difficulty: 'facile',
+    categorie: 'Fabrication',
+    difficulte: 'facile',
     youtubeId: '',
     tags: [] as string[],
-    status: 'draft' as 'draft' | 'published',
+    statut: 'brouillon' as const,
     pdfUrl: '',
     pdfFileName: ''
   });
@@ -56,13 +55,13 @@ export default function EditTP({ params }: { params: { id: string } }) {
       if (data) {
         setTp(data);
         setFormData({
-          title: data.title,
+          titre: data.titre,
           description: data.description,
-          category: data.category,
-          difficulty: data.difficulty,
+          categorie: data.categorie,
+          difficulte: data.difficulte,
           youtubeId: data.youtubeId || '',
           tags: data.tags || [],
-          status: data.status,
+          statut: data.statut,
           pdfUrl: data.pdfUrl || '',
           pdfFileName: data.pdfFileName || ''
         });
@@ -194,8 +193,8 @@ export default function EditTP({ params }: { params: { id: string } }) {
                 <Label htmlFor="title">Titre du TP *</Label>
                 <Input
                   id="title"
-                  value={formData.title}
-                  onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                  value={formData.titre}
+                  onChange={(e) => setFormData(prev => ({ ...prev, titre: e.target.value }))}
                   placeholder="Ex: Maintenance d'un système hydraulique"
                   required
                 />
@@ -205,8 +204,8 @@ export default function EditTP({ params }: { params: { id: string } }) {
                 <Label htmlFor="category">Catégorie *</Label>
                 <select
                   id="category"
-                  value={formData.category}
-                  onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+                  value={formData.categorie}
+                  onChange={(e) => setFormData(prev => ({ ...prev, categorie: e.target.value }))}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                   required
                 >
@@ -222,8 +221,8 @@ export default function EditTP({ params }: { params: { id: string } }) {
                 <Label htmlFor="difficulty">Niveau de difficulté *</Label>
                 <select
                   id="difficulty"
-                  value={formData.difficulty}
-                  onChange={(e) => setFormData(prev => ({ ...prev, difficulty: e.target.value }))}
+                  value={formData.difficulte}
+                  onChange={(e) => setFormData(prev => ({ ...prev, difficulte: e.target.value }))}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                   required
                 >
@@ -237,12 +236,12 @@ export default function EditTP({ params }: { params: { id: string } }) {
                 <Label htmlFor="status">Statut</Label>
                 <select
                   id="status"
-                  value={formData.status}
-                  onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value as 'draft' | 'published' }))}
+                  value={formData.statut}
+                  onChange={(e) => setFormData(prev => ({ ...prev, statut: e.target.value as 'brouillon' | 'publie' }))}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                 >
-                  <option value="draft">Brouillon</option>
-                  <option value="published">Publié</option>
+                  <option value="brouillon">Brouillon</option>
+                  <option value="publie">Publié</option>
                 </select>
               </div>
             </div>
