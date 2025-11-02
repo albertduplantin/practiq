@@ -38,9 +38,10 @@ export interface UserDoc {
 }
 
 export interface Progress {
-  id: string; // `${userId}_${tpId}`
+  id: string; // `${userId}_${contentId}`
   userId: string;
-  tpId: string;
+  contentId: string;
+  type: 'cours' | 'tp';
   status: 'not_started' | 'in_progress' | 'completed';
   score?: number; // Score du quiz si applicable
   completedAt?: Date;
@@ -62,6 +63,49 @@ export interface Comment {
   likes: number;
   createdAt: Date;
   updatedAt: Date;
+}
+
+// ----------------------
+// NOUVEAUX TYPES BACKEND
+// ----------------------
+
+export interface Category {
+  id: string;
+  label: string; // Ex : "Mécanique"
+  type: 'cours' | 'tp' | 'both';
+  ordre: number; // Pour l’affichage
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Content {
+  id: string;
+  type: 'cours' | 'tp';
+  titre: string;
+  description: string;
+  descriptionHtml: string;
+  descriptionMasquee: boolean;
+  categorieId: string; // Référence vers Category
+  difficulte: 1 | 2 | 3 | 4 | 5;
+  coverUrl?: string;
+  youtubeIds: string[];
+  driveLinks: { label: string; url: string }[]; // label facultatif si on garde juste url
+  statut: 'brouillon' | 'publié';
+  ordre: number;
+  auteurId: string;
+  auteurNom: string;
+  tags: string[];
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt?: Date;
+}
+
+export interface ContentFilter {
+  type?: 'cours' | 'tp';
+  categorieId?: string;
+  difficulte?: number;
+  statut?: 'brouillon' | 'publié';
+  search?: string;
 }
 
 export interface Course {
