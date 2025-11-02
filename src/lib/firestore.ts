@@ -171,8 +171,8 @@ export const getUserStats = async (userId: string): Promise<ProgressStats> => {
   const progress = await getUserProgress(userId);
   const allTPs = await getTPs();
   
-  const completed = progress.filter(p => p.status === 'completed');
-  const inProgress = progress.filter(p => p.status === 'in_progress');
+  const completed = progress.filter(p => p.type === 'tp' && p.status === 'completed');
+  const inProgress = progress.filter(p => p.type === 'tp' && p.status === 'in_progress');
   
   const categoryStats: { [key: string]: { completed: number; total: number } } = {};
   
@@ -183,7 +183,7 @@ export const getUserStats = async (userId: string): Promise<ProgressStats> => {
     }
     categoryStats[tp.categorie].total++;
     
-    const userProgress = progress.find(p => p.tpId === tp.id);
+    const userProgress = progress.find(p => p.contentId === tp.id && p.type === 'tp');
     if (userProgress?.status === 'completed') {
       categoryStats[tp.categorie].completed++;
     }
