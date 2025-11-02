@@ -65,7 +65,7 @@ export default function TPsList() {
     // Recherche textuelle
     if (searchTerm) {
       filtered = filtered.filter(tp => 
-        tp.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        tp.titre.toLowerCase().includes(searchTerm.toLowerCase()) ||
         tp.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
         tp.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
       );
@@ -73,13 +73,13 @@ export default function TPsList() {
 
     // Filtres
     if (filter.categorie) {
-      filtered = filtered.filter(tp => tp.category === filter.categorie);
+      filtered = filtered.filter(tp => tp.categorie === filter.categorie);
     }
     if (filter.difficulte) {
-      filtered = filtered.filter(tp => tp.difficulty === filter.difficulte);
+      filtered = filtered.filter(tp => tp.difficulte === filter.difficulte);
     }
     if (filter.statut) {
-      filtered = filtered.filter(tp => tp.status === filter.statut);
+      filtered = filtered.filter(tp => tp.statut === filter.statut);
     }
 
     setFilteredTPs(filtered);
@@ -99,9 +99,9 @@ export default function TPsList() {
 
   const handleToggleStatus = async (tp: TP) => {
     try {
-      const newStatus = tp.status === 'published' ? 'draft' : 'published';
-      await updateTP(tp.id, { status: newStatus });
-      setTps(tps.map(t => t.id === tp.id ? { ...t, status: newStatus } : t));
+      const newStatus = tp.statut === 'publié' ? 'brouillon' : 'publié';
+      await updateTP(tp.id, { statut: newStatus });
+      setTps(tps.map(t => t.id === tp.id ? { ...t, statut: newStatus } : t));
     } catch (error) {
       console.error('Erreur lors de la mise à jour:', error);
       alert('Erreur lors de la mise à jour du TP');
@@ -110,9 +110,11 @@ export default function TPsList() {
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case 'facile': return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400';
-      case 'moyen': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400';
-      case 'difficile': return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400';
+      case '1': return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400';
+      case '2': return 'bg-lime-100 text-lime-800 dark:bg-lime-900/20 dark:text-lime-400';
+      case '3': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400';
+      case '4': return 'bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400';
+      case '5': return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400';
       default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400';
     }
   };
@@ -254,7 +256,7 @@ export default function TPsList() {
                 <div className="flex justify-between items-start mb-4">
                   <div className="flex-1">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                      {tp.title}
+                      {tp.titre}
                     </h3>
                     <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
                       {tp.description}
@@ -264,13 +266,13 @@ export default function TPsList() {
                     <button
                       onClick={() => handleToggleStatus(tp)}
                       className={`p-2 rounded-md ${
-                        tp.status === 'published'
+                        tp.statut === 'publié'
                           ? 'text-green-600 hover:bg-green-100 dark:hover:bg-green-900/20'
                           : 'text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
                       }`}
-                      title={tp.status === 'published' ? 'Masquer' : 'Publier'}
+                      title={tp.statut === 'publié' ? 'Masquer' : 'Publier'}
                     >
-                      {tp.status === 'published' ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+                      {tp.statut === 'publié' ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
                     </button>
                     <Button
                       variant="outline"
@@ -284,18 +286,18 @@ export default function TPsList() {
                 </div>
 
                 <div className="flex flex-wrap gap-2 mb-4">
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${getCategoryColor(tp.category)}`}>
-                    {tp.category}
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${getCategoryColor(tp.categorie)}`}>
+                    {tp.categorie}
                   </span>
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(tp.difficulty)}`}>
-                    {tp.difficulty}
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(String(tp.difficulte))}`}>
+                    {tp.difficulte}
                   </span>
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    tp.status === 'published' 
+                    tp.statut === 'publié' 
                       ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
                       : 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400'
                   }`}>
-                    {tp.status === 'published' ? 'Publié' : 'Brouillon'}
+                    {tp.statut === 'publié' ? 'Publié' : 'Brouillon'}
                   </span>
                 </div>
 
