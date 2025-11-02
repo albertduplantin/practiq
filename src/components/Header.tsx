@@ -8,8 +8,9 @@ import { useTheme } from 'next-themes';
 
 const navItems = [
   { href: '/', label: 'Accueil' },
+  { href: '/cours', label: 'Cours' },
   { href: '/login', label: 'Connexion' },
-];
+] as const;
 
 export default function Header() {
   const { theme, setTheme } = useTheme();

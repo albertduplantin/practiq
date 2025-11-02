@@ -89,6 +89,8 @@ export default function EditTP({ params }: { params: { id: string } }) {
 
       const updatedTP: Partial<TP> = {
         ...formData,
+        categorie: formData.categorie as TP['categorie'],
+        difficulte: Number(formData.difficulte) as TP['difficulte'],
         tags,
         updatedAt: new Date()
       };

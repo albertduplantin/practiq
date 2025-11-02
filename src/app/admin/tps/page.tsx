@@ -30,7 +30,6 @@ export default function TPsList() {
   const [filter, setFilter] = useState<TPFilter>({
     categorie: '',
     difficulte: 0,
-    statut: '' as any
   });
   const [loadingTPs, setLoadingTPs] = useState(true);
 
@@ -51,8 +50,8 @@ export default function TPsList() {
   const loadTPs = async () => {
     try {
       setLoadingTPs(true);
-      const data = await getTPs();
-      setTps(data);
+      const res = await getTPs();
+      setTps(res.docs);
     } catch (error) {
       console.error('Erreur lors du chargement des TP:', error);
     } finally {
@@ -215,7 +214,10 @@ export default function TPsList() {
 
             <select
               value={filter.statut || ''}
-              onChange={(e) => setFilter({ ...filter, statut: e.target.value as any })}
+              onChange={(e) => {
+                const value = e.target.value as 'brouillon' | 'publié' | '';
+                setFilter({ ...filter, statut: value || undefined });
+              }}
               className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
             >
               <option value="">Tous les statuts</option>
