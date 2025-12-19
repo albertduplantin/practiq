@@ -9,7 +9,7 @@ import { Plus, BookOpen, Users, BarChart3 } from 'lucide-react';
 import Link from 'next/link';
 
 export default function AdminDashboard() {
-  const { user, userDoc, loading } = useAuth();
+  const { userDoc, loading } = useAuth();
   const router = useRouter();
   const [stats] = useState({
     totalTPs: 0,
@@ -154,6 +154,28 @@ export default function AdminDashboard() {
 
           <Card className="p-6">
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+              Gestion des Cours
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
+              Créez des parcours d&apos;apprentissage complets.
+            </p>
+            <div className="space-y-3">
+              <Button asChild className="w-full">
+                <Link href="/admin/cours/new">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Nouveau Cours
+                </Link>
+              </Button>
+              <Button asChild variant="outline" className="w-full">
+                <Link href="/admin/cours">
+                  Voir tous les cours
+                </Link>
+              </Button>
+            </div>
+          </Card>
+
+          <Card className="p-6">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
               Gestion des utilisateurs
             </h2>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
@@ -175,6 +197,40 @@ export default function AdminDashboard() {
               )}
             </div>
           </Card>
+
+          <Card className="p-6">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+              Modération
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
+              Gérez les commentaires des étudiants.
+            </p>
+            <div className="space-y-3">
+              <Button asChild variant="outline" className="w-full">
+                <Link href="/admin/comments">
+                  Modérer les commentaires
+                </Link>
+              </Button>
+            </div>
+          </Card>
+
+          {userDoc.role === 'admin' && (
+            <Card className="p-6">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                Catégories
+              </h2>
+              <p className="text-gray-600 dark:text-gray-400 mb-6">
+                Organisez vos contenus par catégories.
+              </p>
+              <div className="space-y-3">
+                <Button asChild variant="outline" className="w-full">
+                  <Link href="/admin/categories">
+                    Gérer les catégories
+                  </Link>
+                </Button>
+              </div>
+            </Card>
+          )}
         </div>
       </div>
     </div>

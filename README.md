@@ -1,36 +1,208 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Practiq - Plateforme d'apprentissage BAC Pro MSPC
 
-## Getting Started
+Plateforme de cours et travaux pratiques pour le **BAC Pro MSPC** (Maintenance des Systèmes de Production Connectés).
 
-First, run the development server:
+## 📋 Fonctionnalités
 
+### Pour les Étudiants
+
+#### 🎯 Tableau de bord personnalisé
+- Visualisation de la progression globale
+- Statistiques par catégorie (Fabrication, Électrotechnique, Mécanique, Hydraulique, Gestion de maintenance)
+- Suivi du temps passé sur les TP
+- Scores moyens et badges de réussite
+
+#### 📚 Système de cours et TP
+- **Parcours de formation** : Cours organisés regroupant plusieurs TP
+- **Travaux Pratiques individuels** : TP indépendants avec niveaux de difficulté (1-5)
+- **Contenu riche** : 
+  - Descriptions détaillées avec éditeur WYSIWYG
+  - Vidéos YouTube intégrées
+  - Documents PDF téléchargeables
+  - Images de couverture
+
+#### 🔍 Recherche et filtrage avancés
+- Recherche par mot-clé
+- Filtrage par catégorie
+- Filtrage par niveau de difficulté
+- Filtrage par tags
+- Vue séparée cours/TP ou combinée
+
+#### 💬 Système de commentaires
+- Poser des questions sur chaque TP
+- Partager son expérience
+- Commentaires modérés par les enseignants
+- Affichage de la date et de l'auteur
+
+#### 📊 Suivi de progression
+- Marquer les TP comme "En cours" ou "Terminés"
+- Barre de progression visuelle
+- Historique des TP complétés
+
+### Pour les Enseignants
+
+#### 👨‍🏫 Gestion des TP
+- Créer, modifier et supprimer des TP
+- Éditeur WYSIWYG pour le contenu
+- Upload de fichiers PDF
+- Intégration de vidéos YouTube
+- Statuts : Brouillon / Publié
+- Système de tags
+- Ordre d'affichage personnalisable
+
+#### 📖 Gestion des cours
+- Créer des parcours de formation
+- Associer plusieurs TP à un cours
+- Description détaillée du parcours
+- Gestion de l'ordre d'affichage
+
+#### 🗂️ Gestion des catégories (Admins uniquement)
+- Créer et gérer des catégories dynamiques
+- Définir le type : Cours, TP, ou les deux
+- Ordre d'affichage personnalisable
+
+#### 📈 Tableau de bord administrateur
+- Vue d'ensemble des statistiques
+- Nombre de TP publiés
+- Nombre d'étudiants
+- TP terminés
+
+### Rôles utilisateurs
+
+- **Student** : Accès aux cours et TP, suivi de progression
+- **Teacher Free** : Création de TP et cours (limité)
+- **Teacher Pro** : Création illimitée de TP et cours
+- **Admin** : Gestion complète de la plateforme + catégories
+
+## 🚀 Installation
+
+### Prérequis
+
+- Node.js 20+
+- npm ou yarn
+- Compte Clerk (pour l'authentification)
+- Compte Firebase (pour Firestore et Storage)
+
+### Configuration
+
+1. Cloner le repository :
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/albertduplantin/practiq.git
+cd practiq
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Installer les dépendances :
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Configurer Clerk :
+   - Créer un compte sur [Clerk.com](https://clerk.com)
+   - Créer une nouvelle application
+   - Copier les clés API dans votre fichier `.env.local` :
+     ```
+     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_xxxxx
+     CLERK_SECRET_KEY=sk_test_xxxxx
+     ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Configurer Firebase :
+   - Créer un projet Firebase
+   - Activer Firestore et Storage
+   - Copier la configuration dans votre `.env.local` :
+     ```
+     NEXT_PUBLIC_FIREBASE_API_KEY=xxxxx
+     NEXT_PUBLIC_FIREBASE_PROJECT_ID=xxxxx
+     # ... autres variables (voir .env.example)
+     ```
 
-## Learn More
+5. Lancer le serveur de développement :
+```bash
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+6. Ouvrir [http://localhost:3000](http://localhost:3000)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🏗️ Technologies utilisées
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Framework** : Next.js 15.5.4 (App Router)
+- **Language** : TypeScript
+- **Styling** : Tailwind CSS
+- **Base de données** : Firebase Firestore
+- **Authentification** : Clerk
+- **Éditeur** : TipTap (éditeur WYSIWYG)
+- **UI Components** : Radix UI
+- **Icons** : Lucide React
 
-## Deploy on Vercel
+## 📁 Structure du projet
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+src/
+├── app/
+│   ├── admin/          # Pages administration
+│   │   ├── tps/        # Gestion des TP
+│   │   ├── cours/      # Gestion des cours
+│   │   └── categories/ # Gestion des catégories
+│   ├── cours/          # Pages cours (étudiants)
+│   ├── tps/            # Pages TP (étudiants)
+│   ├── dashboard/      # Tableau de bord étudiant
+│   └── login/          # Authentification
+├── components/
+│   ├── ui/             # Composants UI réutilisables
+│   └── editor/         # Éditeur WYSIWYG
+├── context/            # React Context (Auth)
+├── firebase/           # Configuration Firebase
+├── lib/                # Utilitaires et helpers
+│   └── firestore.ts    # Fonctions Firestore
+└── types/              # Types TypeScript
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🔧 Scripts disponibles
+
+```bash
+npm run dev      # Lancer le serveur de développement
+npm run build    # Build de production
+npm run start    # Démarrer le serveur de production
+npm run lint     # Linter le code
+```
+
+## 📝 Base de données Firestore
+
+### Collections
+
+- **tps** : Travaux pratiques
+- **courses** : Parcours de formation
+- **categories** : Catégories de contenu
+- **users** : Utilisateurs
+- **progress** : Progression des étudiants
+- **comments** : Commentaires sur les TP
+
+## 🔐 Authentification et Sécurité
+
+**Authentification** : Gérée par Clerk
+- Connexion par email/mot de passe
+- Interface en français
+- Gestion sécurisée des sessions
+- Protection automatique des routes
+
+**Règles de sécurité Firestore** : Définies dans `firestore.rules`
+- Les étudiants peuvent lire les contenus publiés
+- Les enseignants peuvent créer et modifier leurs contenus
+- Les admins ont tous les droits
+- Les utilisateurs peuvent gérer leur propre progression
+- L'ID utilisateur Clerk est utilisé comme clé dans Firestore
+
+## 🎨 Thèmes
+
+L'application supporte les thèmes clair et sombre avec `next-themes`.
+
+## 📄 Licence
+
+Ce projet est sous licence privée.
+
+## 👥 Contributeurs
+
+- Albert Duplantin - Créateur et développeur principal
+
+## 📞 Support
+
+Pour toute question ou problème, veuillez ouvrir une issue sur GitHub.

@@ -1,11 +1,11 @@
 'use client';
 
-import { SignIn } from "@clerk/nextjs";
+import { SignUp } from "@clerk/nextjs";
 
-export default function LoginPage() {
+export default function SignUpPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
-      <SignIn 
+      <SignUp 
         appearance={{
           elements: {
             rootBox: "mx-auto",
@@ -13,8 +13,8 @@ export default function LoginPage() {
           }
         }}
         routing="path"
-        path="/login"
-        signUpUrl="/sign-up"
+        path="/sign-up"
+        signInUrl="/login"
         afterSignInUrl="/dashboard"
         afterSignUpUrl="/dashboard"
       />

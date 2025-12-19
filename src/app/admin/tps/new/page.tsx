@@ -26,7 +26,7 @@ const CATEGORIES = [
 const DIFFICULTES = [1, 2, 3, 4, 5] as const;
 
 export default function NewTP() {
-  const { user } = useAuth();
+  const { user, userDoc } = useAuth();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -63,7 +63,7 @@ export default function NewTP() {
       const tpData: Omit<TP, 'id' | 'createdAt' | 'updatedAt'> = {
         ...formData,
         auteurId: user.uid,
-        auteurNom: user.displayName || user.email || 'Anonyme',
+        auteurNom: userDoc?.displayName || user.email || 'Anonyme',
         ordre: 0, // Sera calculé plus tard
         prerequis: [],
         tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean)

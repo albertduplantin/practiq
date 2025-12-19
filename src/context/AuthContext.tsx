@@ -1,12 +1,11 @@
 'use client';
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { auth } from "@/firebase/config";
-import { onAuthStateChanged, User, signOut } from "firebase/auth";
+import { useUser, useClerk } from "@clerk/nextjs";
 import { getUser } from "@/lib/firestore";
 import { UserDoc } from "@/types/firestore";
 
 type AuthContextType = {
-  user: User | null;
+  user: { uid: string; email: string | null } | null;
   userDoc: UserDoc | null;
   loading: boolean;
   logout: () => Promise<void>;
@@ -15,16 +14,26 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const { user: clerkUser, isLoaded } = useUser();
+  const { signOut } = useClerk();
   const [userDoc, setUserDoc] = useState<UserDoc | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Convert Clerk user to our user format
+  const user = clerkUser ? {
+    uid: clerkUser.id,
+    email: clerkUser.primaryEmailAddress?.emailAddress || null
+  } : null;
+
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setUser(currentUser);
-      if (currentUser) {
+    const loadUserDoc = async () => {
+      if (!isLoaded) {
+        return;
+      }
+
+      if (clerkUser) {
         try {
-          const userData = await getUser(currentUser.uid);
+          const userData = await getUser(clerkUser.id);
           setUserDoc(userData);
         } catch (error) {
           console.error('Erreur lors du chargement du profil utilisateur:', error);
@@ -34,11 +43,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUserDoc(null);
       }
       setLoading(false);
-    });
-    return () => unsubscribe();
-  }, []);
+    };
 
-  const logout = () => signOut(auth);
+    loadUserDoc();
+  }, [clerkUser, isLoaded]);
+
+  const logout = async () => {
+    await signOut();
+  };
 
   return (
     <AuthContext.Provider value={{ user, userDoc, loading, logout }}>

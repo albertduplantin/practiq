@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 
 export default function Home() {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
@@ -25,11 +25,11 @@ export default function Home() {
               <p className="text-lg text-gray-700 dark:text-gray-300">
                 Connecté en tant que <span className="font-semibold text-primary">{user.email}</span>
               </p>
-              <div className="flex gap-4 justify-center">
-                <Button onClick={logout} variant="outline">
-                  Déconnexion
-                </Button>
+              <div className="flex gap-4 justify-center flex-wrap">
                 <Button asChild>
+                  <Link href="/dashboard">Mon tableau de bord</Link>
+                </Button>
+                <Button asChild variant="outline">
                   <Link href="/cours">Voir les cours</Link>
                 </Button>
               </div>
