@@ -2,22 +2,37 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, Sun, Moon } from 'lucide-react';
+import { Menu, Sun, Moon, LogOut } from 'lucide-react';
 import { Sheet } from '@/components/ui/Sheet';
 import { useTheme } from 'next-themes';
-
-const navItems = [
-  { href: '/', label: 'Accueil' },
-  { href: '/cours', label: 'Cours' },
-  { href: '/login', label: 'Connexion' },
-] as const;
+import { useAuth } from '@/context/AuthContext';
+import { Button } from '@/components/ui/Button';
 
 export default function Header() {
   const { theme, setTheme } = useTheme();
+  const { user, userDoc, logout } = useAuth();
+
+  const getNavItems = () => {
+    const items = [
+      { href: '/', label: 'Accueil' },
+      { href: '/cours', label: 'Cours' },
+    ];
+    
+    if (user) {
+      items.push({ href: '/dashboard', label: 'Tableau de bord' });
+      if (userDoc && ['admin', 'teacher_pro', 'teacher_free'].includes(userDoc.role)) {
+        items.push({ href: '/admin', label: 'Administration' });
+      }
+    }
+    
+    return items;
+  };
+
+  const navItems = getNavItems();
 
   return (
     <header className="w-full border-b border-gray-200 dark:border-gray-800">
-      <div className="max-w-5xl mx-auto px-4 flex h-16 items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 flex h-16 items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
           <Image src="/logo.svg" alt="Practiq" width={32} height={32} />
@@ -31,6 +46,16 @@ export default function Header() {
               {item.label}
             </Link>
           ))}
+          {user ? (
+            <Button onClick={logout} variant="outline" size="sm">
+              <LogOut className="h-4 w-4 mr-2" />
+              Déconnexion
+            </Button>
+          ) : (
+            <Button asChild size="sm">
+              <Link href="/login">Connexion</Link>
+            </Button>
+          )}
           <button
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
             className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
@@ -70,6 +95,22 @@ export default function Header() {
                   {item.label}
                 </Link>
               ))}
+              {user ? (
+                <button
+                  onClick={logout}
+                  className="block px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-md text-left"
+                >
+                  <LogOut className="h-4 w-4 inline mr-2" />
+                  Déconnexion
+                </button>
+              ) : (
+                <Link
+                  href="/login"
+                  className="block px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-md"
+                >
+                  Connexion
+                </Link>
+              )}
             </div>
           </Sheet>
         </div>

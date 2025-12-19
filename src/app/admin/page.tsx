@@ -9,7 +9,7 @@ import { Plus, BookOpen, Users, BarChart3 } from 'lucide-react';
 import Link from 'next/link';
 
 export default function AdminDashboard() {
-  const { user, userDoc, loading } = useAuth();
+  const { userDoc, loading } = useAuth();
   const router = useRouter();
   const [stats] = useState({
     totalTPs: 0,

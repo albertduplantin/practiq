@@ -12,9 +12,7 @@ import {
   Edit, 
   Trash2, 
   Eye, 
-  EyeOff, 
-  Filter,
-  MoreVertical,
+  EyeOff,
   BookOpen
 } from 'lucide-react';
 import Link from 'next/link';
