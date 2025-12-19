@@ -80,7 +80,8 @@ Plateforme de cours et travaux pratiques pour le **BAC Pro MSPC** (Maintenance d
 
 - Node.js 20+
 - npm ou yarn
-- Compte Firebase (Firestore + Authentication)
+- Compte Clerk (pour l'authentification)
+- Compte Firebase (pour Firestore et Storage)
 
 ### Configuration
 
@@ -95,17 +96,31 @@ cd practiq
 npm install
 ```
 
-3. Configurer Firebase :
-   - Créer un projet Firebase
-   - Activer Firestore et Authentication
-   - Copier la configuration dans `src/firebase/config.ts`
+3. Configurer Clerk :
+   - Créer un compte sur [Clerk.com](https://clerk.com)
+   - Créer une nouvelle application
+   - Copier les clés API dans votre fichier `.env.local` :
+     ```
+     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_xxxxx
+     CLERK_SECRET_KEY=sk_test_xxxxx
+     ```
 
-4. Lancer le serveur de développement :
+4. Configurer Firebase :
+   - Créer un projet Firebase
+   - Activer Firestore et Storage
+   - Copier la configuration dans votre `.env.local` :
+     ```
+     NEXT_PUBLIC_FIREBASE_API_KEY=xxxxx
+     NEXT_PUBLIC_FIREBASE_PROJECT_ID=xxxxx
+     # ... autres variables (voir .env.example)
+     ```
+
+5. Lancer le serveur de développement :
 ```bash
 npm run dev
 ```
 
-5. Ouvrir [http://localhost:3000](http://localhost:3000)
+6. Ouvrir [http://localhost:3000](http://localhost:3000)
 
 ## 🏗️ Technologies utilisées
 
@@ -113,7 +128,7 @@ npm run dev
 - **Language** : TypeScript
 - **Styling** : Tailwind CSS
 - **Base de données** : Firebase Firestore
-- **Authentification** : Firebase Auth
+- **Authentification** : Clerk
 - **Éditeur** : TipTap (éditeur WYSIWYG)
 - **UI Components** : Radix UI
 - **Icons** : Lucide React
@@ -161,13 +176,20 @@ npm run lint     # Linter le code
 - **progress** : Progression des étudiants
 - **comments** : Commentaires sur les TP
 
-## 🔐 Règles de sécurité
+## 🔐 Authentification et Sécurité
 
-Les règles de sécurité Firestore sont définies dans `firestore.rules` :
+**Authentification** : Gérée par Clerk
+- Connexion par email/mot de passe
+- Interface en français
+- Gestion sécurisée des sessions
+- Protection automatique des routes
+
+**Règles de sécurité Firestore** : Définies dans `firestore.rules`
 - Les étudiants peuvent lire les contenus publiés
 - Les enseignants peuvent créer et modifier leurs contenus
 - Les admins ont tous les droits
 - Les utilisateurs peuvent gérer leur propre progression
+- L'ID utilisateur Clerk est utilisé comme clé dans Firestore
 
 ## 🎨 Thèmes
 
