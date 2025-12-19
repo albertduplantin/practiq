@@ -2,6 +2,23 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+### Configuration Firebase
+
+Avant de démarrer le serveur de développement, vous devez configurer Firebase :
+
+1. Copiez le fichier `.env.example` en `.env.local` :
+   ```bash
+   cp .env.example .env.local
+   ```
+
+2. Allez sur [Firebase Console](https://console.firebase.google.com) et créez un nouveau projet (ou utilisez un projet existant)
+
+3. Dans les paramètres du projet (⚙️ > Paramètres du projet > Général), créez une application web si ce n'est pas déjà fait
+
+4. Copiez les valeurs de configuration Firebase dans votre fichier `.env.local`
+
+### Démarrer le serveur de développement
+
 First, run the development server:
 
 ```bash
