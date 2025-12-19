@@ -181,18 +181,25 @@ export default function CoursPage() {
         )}
 
         {/* No Results */}
-        {((viewMode === 'all' || viewMode === 'courses') && filteredCourses.length === 0 &&
-          (viewMode === 'all' || viewMode === 'tps') && filteredTPs.length === 0) && (
-          <Card className="p-8 text-center">
-            <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-              Aucun résultat
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400">
-              Essayez de modifier vos critères de recherche
-            </p>
-          </Card>
-        )}
+        {(() => {
+          const shouldShowCourses = viewMode === 'all' || viewMode === 'courses';
+          const shouldShowTPs = viewMode === 'all' || viewMode === 'tps';
+          const hasNoCourses = shouldShowCourses && filteredCourses.length === 0;
+          const hasNoTPs = shouldShowTPs && filteredTPs.length === 0;
+          const noResults = hasNoCourses && hasNoTPs;
+          
+          return noResults && (
+            <Card className="p-8 text-center">
+              <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                Aucun résultat
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400">
+                Essayez de modifier vos critères de recherche
+              </p>
+            </Card>
+          );
+        })()}
       </div>
     </div>
   );

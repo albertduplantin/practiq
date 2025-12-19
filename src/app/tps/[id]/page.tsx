@@ -20,6 +20,7 @@ export default function TPDetailPage() {
   const [newComment, setNewComment] = useState('');
   const [submittingComment, setSubmittingComment] = useState(false);
   const [progressStatus, setProgressStatus] = useState<'not_started' | 'in_progress' | 'completed'>('not_started');
+  const [startTime] = useState<number>(Date.now());
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,13 +52,17 @@ export default function TPDetailPage() {
 
   const handleCompleteTP = async () => {
     if (user && tp) {
+      // Calculate time spent in minutes
+      const timeSpentMs = Date.now() - startTime;
+      const timeSpentMinutes = Math.round(timeSpentMs / 60000);
+      
       await updateProgress(user.uid, tp.id, {
         contentId: tp.id,
         userId: user.uid,
         type: 'tp',
         status: 'completed',
         completedAt: new Date(),
-        timeSpent: 0 // TODO: track actual time
+        timeSpent: timeSpentMinutes
       });
       setProgressStatus('completed');
     }
