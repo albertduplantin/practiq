@@ -198,6 +198,22 @@ export default function AdminDashboard() {
             </div>
           </Card>
 
+          <Card className="p-6">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+              Modération
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
+              Gérez les commentaires des étudiants.
+            </p>
+            <div className="space-y-3">
+              <Button asChild variant="outline" className="w-full">
+                <Link href="/admin/comments">
+                  Modérer les commentaires
+                </Link>
+              </Button>
+            </div>
+          </Card>
+
           {userDoc.role === 'admin' && (
             <Card className="p-6">
               <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">

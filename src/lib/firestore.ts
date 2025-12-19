@@ -168,6 +168,32 @@ export const createComment = async (commentData: Omit<Comment, 'id' | 'createdAt
   return docRef.id;
 };
 
+export const getAllComments = async () => {
+  const q = query(
+    getCollection(COLLECTIONS.COMMENTS),
+    where('isDeleted', '==', false),
+    orderBy('createdAt', 'desc')
+  );
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Comment));
+};
+
+export const updateComment = async (commentId: string, commentData: Partial<Comment>) => {
+  const docRef = getDocument(COLLECTIONS.COMMENTS, commentId);
+  await updateDoc(docRef, {
+    ...commentData,
+    updatedAt: new Date()
+  });
+};
+
+export const deleteComment = async (commentId: string) => {
+  const docRef = getDocument(COLLECTIONS.COMMENTS, commentId);
+  await updateDoc(docRef, {
+    isDeleted: true,
+    updatedAt: new Date()
+  });
+};
+
 // Stats
 export const getUserStats = async (userId: string): Promise<ProgressStats> => {
   const progress = await getUserProgress(userId);
