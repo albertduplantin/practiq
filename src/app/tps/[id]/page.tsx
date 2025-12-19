@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { getTP, getTPComments, createComment, updateProgress } from '@/lib/firestore';
 import { useAuth } from '@/context/AuthContext';
 import { TP, Comment } from '@/types/firestore';
