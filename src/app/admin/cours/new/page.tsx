@@ -14,7 +14,7 @@ import { createCourse, getTPs } from '@/lib/firestore';
 import { TP } from '@/types/firestore';
 import dynamic from 'next/dynamic';
 
-const TipTapEditor = dynamic(() => import('@/components/editor/TipTapEditor'), { ssr: false });
+const TipTapEditor = dynamic(() => import('@/components/editor/TipTapEditor').then(mod => ({ default: mod.TipTapEditor })), { ssr: false });
 
 export default function NewCoursePage() {
   const { userDoc, loading } = useAuth();
